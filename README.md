@@ -2,11 +2,36 @@
 
 Onboard shortcuts for the Ajazz AKC087 TKL. Pairing works without the Windows driver. Lighting is stored on the board.
 
+Interactive page for Homarr/nginx: copy the [`web/`](web/) folder onto Unraid. No Node at runtime.
+
 **Kill RGB**
 
 1. `FN + X` — on / off
 2. `FN + ↓` — dim until dark
 3. `FN + \` — cycle the 18 effects until the off one
+
+## Host on Unraid (Krusty-Burger)
+
+nginx is enough. This is a few kilobytes of HTML/CSS/JS.
+
+| Piece | Role |
+| --- | --- |
+| **nginx** | File server. Serves `web/`. |
+| **Traefik** (later) | Hostname + TLS in front of nginx. Does not replace nginx. |
+| **NPM** (now) | nginx + a GUI. Fine until you switch. |
+
+When you move to Traefik: keep nginx as the container that holds these files. Traefik routes `fn.your.tld` → that container.
+
+1. Copy `web/` to `/mnt/user/appdata/akc087-fn/`
+2. Copy `deploy/nginx.conf` to `/mnt/user/appdata/akc087-fn/nginx.conf`
+3. Docker → add `nginx:alpine`
+   - Port: host `8787` → container `80`
+   - Path: `/mnt/user/appdata/akc087-fn` → `/usr/share/nginx/html` (read only)
+   - Path: `/mnt/user/appdata/akc087-fn/nginx.conf` → `/etc/nginx/conf.d/default.conf` (read only)
+4. Open `http://krusty-burger:8787/`
+5. Homarr → iframe widget → that URL (must load from the PC that opens Homarr)
+
+A local VIA container is **not** a general web server. Same nginx can host VIA later as a second folder or hostname. WebHID needs `https://` (Traefik) or `http://localhost` — not plain `http://192.168.x.x`.
 
 ## RGB
 
@@ -72,9 +97,4 @@ Ajazz manuals disagree on whether A or S is Mac. Tap both once and watch whether
 - **Confirmed on AKC087:** FN+Q / W / E / R (Amazon listing).
 - **Family firmware:** RGB cycle, brightness, color, presets, Win lock, and factory reset follow Ajazz tri-mode TKL boards of that year (AK873 / AC081). If `FN + \` does nothing, try `FN + Ins` — some inserts print the nav-cluster variant.
 
-Linux and Mac never need the Windows installer. Typing works as HID; these chords are onboard.
-
-## Files
-
-- [fn-map.json](fn-map.json) — structured combo list
-- Print this README for a desk copy
+Linux and Mac never need the Windows installer.
