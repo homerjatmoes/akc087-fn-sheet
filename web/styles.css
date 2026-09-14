@@ -15,6 +15,7 @@
   --ok: #3d5a45;
   --u: clamp(1.55rem, 4.2vw, 2.35rem);
   --g: 3px;
+  --row-g: 0.7rem;
 }
 * { box-sizing: border-box; }
 html, body {
@@ -119,13 +120,15 @@ h1 {
   border-radius: 12px;
   background: color-mix(in srgb, var(--steel) 92%, black);
   border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--row-g);
 }
 .lamellae {
   display: none;
   height: 6px;
   overflow: hidden;
   border-radius: 999px;
-  margin-bottom: 0.5rem;
 }
 @media (min-width: 640px) { .lamellae { display: flex; } }
 .lamellae span { flex: 1; border-right: 1px solid var(--steel); }
