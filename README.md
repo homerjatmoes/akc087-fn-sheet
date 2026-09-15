@@ -18,25 +18,25 @@ nginx serves the site from `/mnt/user/appdata/nginx/www/kbfn/`
 
 Mapped on the CachyOS PC as `/mnt/Krusty-Burger/appdata/nginx/www/kbfn/`
 
-The GitHub repo keeps the site in `web/`. Keep a clone next to `www`, then copy `web/` into `kbfn/`.
+The GitHub repo keeps the site in `web/`. Clone it on the CachyOS PC under Documents, then copy `web/` onto nginx.
 
 ### First clone (CachyOS)
 
 ```bash
-git clone https://github.com/homerjatmoes/keyboard-fn-sheets.git /mnt/Krusty-Burger/appdata/nginx/keyboard-fn-sheets
+git clone https://github.com/homerjatmoes/keyboard-fn-sheets.git /home/mark/Documents/Dev/kbfn
 mkdir -p /mnt/Krusty-Burger/appdata/nginx/www/kbfn
-cp -a /mnt/Krusty-Burger/appdata/nginx/keyboard-fn-sheets/web/. /mnt/Krusty-Burger/appdata/nginx/www/kbfn/
+cp -a /home/mark/Documents/Dev/kbfn/web/. /mnt/Krusty-Burger/appdata/nginx/www/kbfn/
 ```
 
 ### Later updates
 
 ```bash
-cd /mnt/Krusty-Burger/appdata/nginx/keyboard-fn-sheets && git pull && cp -a web/. /mnt/Krusty-Burger/appdata/nginx/www/kbfn/
+cd /home/mark/Documents/Dev/kbfn && git pull && cp -a web/. /mnt/Krusty-Burger/appdata/nginx/www/kbfn/
 ```
 
 Then hard-refresh so `?v=hub4` loads.
 
-Do not `git pull` inside `kbfn/` itself — that folder is the served copy of `web/`, not the git repo.
+Do not `git pull` inside the nginx `www/kbfn/` folder — that is the served copy of `web/`, not the git repo.
 
 ## `web/json/`
 
