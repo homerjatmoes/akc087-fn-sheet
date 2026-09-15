@@ -2,7 +2,7 @@
 
 Onboard FN / VIA maps for the boards on this desk.
 
-Interactive page for Homarr/nginx: copy the [`web/`](web/) folder onto Unraid. No Node at runtime.
+Static HTML/CSS/JS. Copy [`web/`](web/) onto Unraid nginx. No Node at runtime.
 
 ## Boards
 
@@ -10,11 +10,11 @@ Interactive page for Homarr/nginx: copy the [`web/`](web/) folder onto Unraid. N
 - **Epomaker** — Aula F75 Ultra, EK21, Galaxy65, QK108 (VIA + onboard FN)
 - **Royal Kludge** — RK61
 
-Open `web/index.html` (or the nginx URL). Pick a manufacturer, then a model.
+Open the nginx URL. Pick a manufacturer, then a model. Hash routes look like `#/epomaker/aula-f75-ultra`.
 
 ## Host on Unraid (Krusty-Burger)
 
-nginx is enough. This is HTML/CSS/JS.
+nginx is enough.
 
 1. Copy `web/` to `/mnt/user/appdata/akc087-fn/`
 2. Copy `deploy/nginx.conf` to `/mnt/user/appdata/akc087-fn/nginx.conf`
@@ -23,8 +23,7 @@ nginx is enough. This is HTML/CSS/JS.
    - Path: `/mnt/user/appdata/akc087-fn` → `/usr/share/nginx/html` (read only)
    - Path: `/mnt/user/appdata/akc087-fn/nginx.conf` → `/etc/nginx/conf.d/default.conf` (read only)
 4. Open `http://krusty-burger:8787/`
-5. Homarr → iframe widget → that URL
 
-Replace the old `web/` contents when you pull this update — hash routes (`#/epomaker/aula-f75-ultra`) need this `index.html` + `data.json` + `app.js`.
+Replace the old `web/` contents when you pull this update — hash routes need this `index.html` + `data.json` + `app.js` + `hub.css` + `sheets/*.json`.
 
 A local VIA container is **not** a general web server. WebHID needs `https://` (Traefik) or `http://localhost`.
