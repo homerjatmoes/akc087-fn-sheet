@@ -14,16 +14,27 @@ Open the nginx URL. Pick a manufacturer, then a model. Hash routes look like `#/
 
 ## Host on Unraid (Krusty-Burger)
 
-nginx is enough.
+nginx document root: `/mnt/user/appdata/nginx/www/`
 
-1. Copy `web/` to `/mnt/user/appdata/akc087-fn/`
-2. Copy `deploy/nginx.conf` to `/mnt/user/appdata/akc087-fn/nginx.conf`
-3. Docker → `nginx:alpine`
-   - Port: host `8787` → container `80`
-   - Path: `/mnt/user/appdata/akc087-fn` → `/usr/share/nginx/html` (read only)
-   - Path: `/mnt/user/appdata/akc087-fn/nginx.conf` → `/etc/nginx/conf.d/default.conf` (read only)
-4. Open `http://krusty-burger:8787/`
+Mapped on the CachyOS PC as `/mnt/Krusty-Burger/appdata/nginx/www/`
 
-Replace the old `web/` contents when you pull this update — hash routes need this `index.html` + `data.json` + `app.js` + `hub.css` + `sheets/*.json`.
+The GitHub repo keeps the site in `web/`. Keep a clone next to `www`, then copy `web/` into the nginx root.
+
+### First clone (CachyOS)
+
+```bash
+git clone https://github.com/homerjatmoes/akc087-fn-sheet.git /mnt/Krusty-Burger/appdata/nginx/akc087-fn-sheet
+cp -a /mnt/Krusty-Burger/appdata/nginx/akc087-fn-sheet/web/. /mnt/Krusty-Burger/appdata/nginx/www/
+```
+
+### Later updates
+
+```bash
+cd /mnt/Krusty-Burger/appdata/nginx/akc087-fn-sheet && git pull && cp -a web/. /mnt/Krusty-Burger/appdata/nginx/www/
+```
+
+Then hard-refresh the Homarr iframe so `?v=hub3` loads.
+
+Do not `git pull` inside `www/` itself — that folder is the served copy of `web/`, not the git repo.
 
 A local VIA container is **not** a general web server. WebHID needs `https://` (Traefik) or `http://localhost`.
