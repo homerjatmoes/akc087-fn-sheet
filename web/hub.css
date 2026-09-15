@@ -34,7 +34,7 @@
   font-weight: 700;
   letter-spacing: 0.04em;
 }
-.maker-name { display: block; font-family: Georgia, "Times New Roman", serif; font-size: 1.25rem; font-weight: 500; }
+.maker-name { display: block; flex: 1; font-family: Georgia, "Times New Roman", serif; font-size: 1.25rem; font-weight: 500; }
 .maker-blurb { display: block; font-size: 0.85rem; color: var(--muted); }
 .chev { margin-left: auto; color: var(--subtle); transition: transform 150ms; }
 .maker-btn[aria-expanded="true"] .chev { transform: rotate(180deg); }
@@ -103,7 +103,10 @@
   font-size: 0.75rem;
   font-weight: 600;
 }
-.plate.pad { min-width: 18rem; max-width: 28rem; }
+.plate.pad { min-width: 0; max-width: none; }
 .plate.pad .lamellae { display: none; }
-.plate.sixty { min-width: 42rem; }
+.plate.sixty { min-width: 0; }
 .notes { margin: 0; font-size: 0.9rem; line-height: 1.5; color: var(--muted); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.via-steps a { color: var(--steel); font-weight: 600; text-underline-offset: 2px; }
+.btn { text-decoration: none; display: inline-flex; align-items: center; }

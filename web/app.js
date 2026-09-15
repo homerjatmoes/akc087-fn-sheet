@@ -75,7 +75,7 @@
       btn.type = "button";
       btn.className = "maker-btn";
       btn.setAttribute("aria-expanded", String(open));
-      btn.innerHTML = `<span class="maker-mark">${esc(maker.name.slice(0, 2))}</span><span><span class="maker-name">${esc(maker.name)}</span><span class="maker-blurb">${esc(maker.blurb)}</span></span><span class="chev">▾</span>`;
+      btn.innerHTML = `<span class="maker-mark">${esc(maker.name.slice(0, 2))}</span><span class="maker-name">${esc(maker.name)}</span><span class="chev">▾</span>`;
       btn.addEventListener("click", () => {
         openMaker = openMaker === maker.id ? "" : maker.id;
         render();
@@ -109,7 +109,7 @@
       }
     }
     const groups = sheet.groups ?? [];
-    if (!groups.some((g) => g.id === group)) group = groups[0]?.id ?? "all";
+    if (group !== "all" && !groups.some((g) => g.id === group)) group = groups[0]?.id ?? "all";
     if (!selectedId) selectedId = sheet.combos[0]?.keyIds[0] ?? null;
 
     const list = group === "all" ? sheet.combos : sheet.combos.filter((c) => c.group === group);
@@ -145,8 +145,10 @@
                 : key.id === "spc"
                   ? `<span class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden">Space</span>`
                   : esc(key.label);
+              const h = key.h || 1;
+              const kind = key.kind ? ` ${key.kind}` : "";
               const x = key.x ? `--x:${key.x};` : "";
-              return `<button type="button" class="${cls}" style="--w:${key.w};${x}" data-key="${esc(key.id)}" aria-pressed="${selectedId === key.id}">${label}</button>`;
+              return `<button type="button" class="${cls}${kind}" style="--w:${key.w};--h:${h};${x}" data-key="${esc(key.id)}" aria-pressed="${selectedId === key.id}">${label}</button>`;
             })
             .join("");
           return `<div class="row"${y}>${keys}</div>`;
@@ -155,8 +157,14 @@
       board = `<div class="plate ${density}"><div class="lamellae"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>${rowsHtml}</div>`;
     }
 
+    function viaStepHtml(step, i) {
+      const n = `<span class="via-n">${i + 1}</span>`;
+      if (typeof step === "string") return `<li>${n}${esc(step)}</li>`;
+      if (step.text) return `<li>${n}${esc(step.text)}</li>`;
+      return `<li>${n}<span>${esc(step.before)}<a href="${esc(step.href)}" target="_blank" rel="noreferrer">${esc(step.label)}</a>${esc(step.after)}</span></li>`;
+    }
     const via = sheet.via?.steps
-      ? `<ol class="via-steps">${sheet.via.steps.map((s, i) => `<li><span class="via-n">${i + 1}</span>${esc(s)}</li>`).join("")}</ol>`
+      ? `<ol class="via-steps">${sheet.via.steps.map(viaStepHtml).join("")}</ol>`
       : "";
 
     const lights = sheet.lightsOut
@@ -186,6 +194,10 @@
         ? "VIA writes to onboard memory."
         : `Highlighted keys are in this filter. Hold Fn, then the highlighted key.`;
 
+    const viaBtn = sheet.via?.jsonUrl
+      ? `<a class="btn" href="${esc(sheet.via.jsonUrl)}" target="_blank" rel="noreferrer">VIA JSON</a>`
+      : "";
+
     app.innerHTML = `<main>
       <a class="back" href="#/">${esc(maker?.name ?? makerId)} / ${esc(model?.name ?? slug)}</a>
       <header class="hero">
@@ -194,7 +206,7 @@
           <h1>${esc(sheet.title)}</h1>
           <p class="lede">${esc(sheet.blurb)}</p>
         </div>
-        <button type="button" class="btn" id="print">Print</button>
+        <div class="hero-actions">${viaBtn}<button type="button" class="btn" id="print">Print</button></div>
       </header>
       ${via}
       <section class="plate-card">
