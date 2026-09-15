@@ -9,7 +9,7 @@
     app.innerHTML =
       '<main class="hub"><header class="hero"><div>' +
       '<p class="eyebrow">Desk</p><h1>Function sheets</h1>' +
-      '<p class="lede">Could not load the catalog. Put <code>data.json</code> and <code>sheets/</code> next to <code>index.html</code>, then hard-refresh.</p>' +
+      '<p class="lede">Could not load the catalog. Put <code>data.json</code> and <code>json/</code> next to <code>index.html</code>, then hard-refresh.</p>' +
       '<p class="lede">' +
       esc(msg) +
       "</p></div></header></main>";
@@ -30,7 +30,7 @@
   const sheetCache = new Map();
   async function loadSheet(key) {
     if (sheetCache.has(key)) return sheetCache.get(key);
-    const res = await fetch("sheets/" + key.replace("/", "--") + ".json", { cache: "no-store" });
+    const res = await fetch("json/" + key.replace("/", "--") + ".json", { cache: "no-store" });
     if (!res.ok) throw new Error("sheet HTTP " + res.status);
     const sheet = await res.json();
     sheetCache.set(key, sheet);
@@ -161,7 +161,10 @@
       const n = `<span class="via-n">${i + 1}</span>`;
       if (typeof step === "string") return `<li>${n}${esc(step)}</li>`;
       if (step.text) return `<li>${n}${esc(step.text)}</li>`;
-      return `<li>${n}<span>${esc(step.before)}<a href="${esc(step.href)}" target="_blank" rel="noreferrer">${esc(step.label)}</a>${esc(step.after)}</span></li>`;
+      const linkAttrs = step.download
+        ? ` download="${esc(step.label)}"`
+        : ` target="_blank" rel="noreferrer"`;
+      return `<li>${n}<span>${esc(step.before)}<a href="${esc(step.href)}"${linkAttrs}>${esc(step.label)}</a>${esc(step.after)}</span></li>`;
     }
     const via = sheet.via?.steps
       ? `<ol class="via-steps">${sheet.via.steps.map(viaStepHtml).join("")}</ol>`
@@ -195,7 +198,7 @@
         : `Highlighted keys are in this filter. Hold Fn, then the highlighted key.`;
 
     const viaBtn = sheet.via?.jsonUrl
-      ? `<a class="btn" href="${esc(sheet.via.jsonUrl)}" target="_blank" rel="noreferrer">VIA JSON</a>`
+      ? `<a class="btn" href="${esc(sheet.via.jsonUrl)}" download="${esc(sheet.via.jsonName || "via.json")}">VIA JSON</a>`
       : "";
 
     app.innerHTML = `<main>
