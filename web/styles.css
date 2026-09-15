@@ -25,6 +25,8 @@ html, body {
   color: var(--ink);
   font-family: system-ui, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 button:not(:disabled) { cursor: pointer; }
 main {
@@ -134,13 +136,30 @@ h1 {
 .lamellae span { flex: 1; border-right: 1px solid var(--steel); }
 .lamellae span:nth-child(odd) { background: color-mix(in srgb, var(--bg) 55%, var(--steel)); }
 .lamellae span:nth-child(even) { background: color-mix(in srgb, var(--ink) 18%, var(--steel)); }
-.row { display: flex; flex-wrap: nowrap; margin-top: var(--row-y, 0); }
-.key {
-  position: relative;
+.row {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  align-items: stretch;
   height: var(--u);
+  min-height: var(--u);
+  margin-top: var(--row-y, 0);
+}
+.key {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  height: var(--u);
+  min-height: var(--u);
+  max-height: var(--u);
   width: calc(var(--u) * var(--w) + var(--g) * (var(--w) - 1));
+  margin: 0;
   margin-right: var(--g);
   margin-left: calc(var(--u) * var(--x, 0) + var(--g) * var(--x, 0));
+  padding: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -149,12 +168,12 @@ h1 {
   border: 1px solid transparent;
   background: color-mix(in srgb, var(--key-alpha) 80%, transparent);
   color: var(--muted);
-  font-size: 0.62rem;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1;
 }
-.key .sub { font-size: 0.55rem; opacity: 0.7; }
+.key .sub { font-size: 9px; line-height: 1; opacity: 0.7; }
 .key.mapped { background: var(--key-mod); color: var(--ink); border-color: var(--border-strong); }
 .key.fn { background: var(--steel); color: var(--steel-fg); border-color: color-mix(in srgb, var(--steel-fg) 30%, transparent); }
 .key.sel { background: var(--ink); color: var(--bg-elevated); border-color: var(--ink); }
